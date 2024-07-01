@@ -17,8 +17,17 @@ permissions:
     packages: write # Allow pushing images to GHCR
 
 jobs:
+  verify-image:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Verify Base Image Integrity
+      run:
+        gh attestation verify oci://ghcr.io/vanilla-os/pico:main --owner Vanilla-OS
+
   build:
     runs-on: ubuntu-latest
+    needs: verify-image
 
     steps:
     - uses: actions/checkout@v4
